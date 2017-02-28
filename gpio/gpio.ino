@@ -16,7 +16,6 @@ int gpio_count = 2; // total count of GPIO used
 
 ESP8266WebServer server(80);
 ESP8266HTTPUpdateServer httpUpdater;
-File fsUploadFile;
 
 #include "server.h"
 

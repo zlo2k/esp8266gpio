@@ -25,6 +25,7 @@ Install Sketch data upload [How to install](http://arduino.esp8266.com/versions/
 ## Instalation
 
 First upload data to spifs. (data folder - 2 files)
+
 Configure use GPIO in sketch.
 
 *Edit part marked  // ---  CONFIG --- //

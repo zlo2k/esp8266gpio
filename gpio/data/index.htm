@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP GPIO monitor</title>
+    <script type="text/javascript">
+        var updatePeriod = 1000;
+        var running = false;
+        var body;
+
+        function init() {
+            body = document.getElementById('body');
+            body.innerHTML = '';
+            getGata(function (data) {
+                var i = 0;
+                for (var gpio in data) {
+                    body.innerHTML += '<div class="gpio">GPIO ' + gpio + ' <button id="off' + i + '" class="red">OFF</button><button id="on' + i + '">ON</button></div>';
+                    i++;
+                }
+                var elements = body.getElementsByTagName('button');
+                for (i = 0; i < elements.length; i++) {
+                    elements[i].onclick = gpioChange;
+                }
+                setInterval(update, updatePeriod);
+            });
+        }
+
+        function getGata(callback) {
+            if (running) {
+                return;
+            }
+            var xh = new XMLHttpRequest();
+            xh.onreadystatechange = function () {
+                if (xh.readyState == 4) {
+                    if (xh.status == 200) {
+                        var data = JSON.parse(xh.responseText);
+                        callback(data);
+                    }
+                }
+                running = false;
+            };
+            xh.open("GET", "/status", true);
+            running = true;
+            xh.send(null);
+        }
+
+        function gpioChange(e) {
+            console.log(e.target);
+            var r = e.target.id.match(/([\w]+)([\d]+)/);
+            var xh = new XMLHttpRequest();
+            xh.open("GET", "/gpio?gpio=" + r[2] + '&status=' + r[1], true);
+            xh.send(null);
+        }
+
+        function update() {
+            getGata(function (data) {
+                var i = 0;
+                for (var gpio in data) {
+                    var btn_on = document.getElementById('on' + i);
+                    var btn_off = document.getElementById('off' + i);
+                    i++;
+                    if (data[gpio] == '0') {
+                        btn_on.disabled = false;
+                        btn_off.disabled = true;
+                    } else {
+                        btn_on.disabled = true;
+                        btn_off.disabled = false;
+                    }
+                }
+            });
+        }
+
+
+    </script>
+    <style>
+        .gpio {
+            margin: 10px;
+            padding: 10px;
+            border: 1px dashed grey;
+            max-width: 400px;
+        }
+
+        .gpio button {
+            float: right;
+            margin: -3px 5px 0 5px;
+            background-color: #6ac45b;
+            border: 0;
+            padding: 5px 15px;
+            color: #fff;
+        }
+
+        .gpio button.red {
+            background-color: #dc4a4a;
+        }
+
+        .gpio button:disabled, .gpio button.red:disabled {
+            background-color: #c0c0c0;
+        }
+    </style>
+</head>
+<body id="body" style="margin:0; padding:0;" onload="init()">
+Loading ...
+</body>
+</html>

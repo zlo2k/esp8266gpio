@@ -1,1 +1,2 @@
 gpio/data* linguist-vendored
+gpio/*.ino linguist-documentation=false

@@ -10,7 +10,7 @@ Universal GPIO control.
 * Light integrate Web GUI
 
 
-![Like this](https://raw.githubusercontent.com/zlo2k/esp8266gpio/master/gpio.jpg)
+![Like this](https://raw.githubusercontent.com/zlo2k/files/master/gpio.jpg)
 
 ## Requirements
 

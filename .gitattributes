@@ -1,3 +1,1 @@
-*.ino linguist-documentation=false
-*.ino text
-*.h text
+*.ino linguist-language=Arduino

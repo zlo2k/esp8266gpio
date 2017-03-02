@@ -1,4 +1,3 @@
-gpio/data* linguist-vendored
-gpio/*.ino linguist-documentation=false
+*.ino linguist-documentation=false
 *.ino text
 *.h text

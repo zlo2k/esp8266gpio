@@ -39,7 +39,7 @@ Upload sketch to esp8266.
 
 Now open in browser IP you'r esp (If esp in AP mode, this 192.168.4.1 else any ip from you'r network) and controll pressing buttons OR you can use direct URL request to control like this:
 
-###http://IP_ESP/gpio?gpio={index gpio from config}&status={on|off}
-
+###http://IP_ESP/gpio?gpio={gpio}&status={on|off}
+*status - not required, if not set status switch
 
 

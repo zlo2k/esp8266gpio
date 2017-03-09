@@ -4,7 +4,7 @@
 #include <ESP8266HTTPUpdateServer.h>
 #include <FS.h>
 
-#define DBG_OUTPUT_PORT Serial
+#define serial Serial
 
 // ---  CONFIG --- //
 
@@ -20,9 +20,9 @@ ESP8266HTTPUpdateServer httpUpdater;
 #include "server.h"
 
 void setup(void) {
-  DBG_OUTPUT_PORT.begin(115200);
-  DBG_OUTPUT_PORT.print("\n");
-  DBG_OUTPUT_PORT.setDebugOutput(true);
+  serial.begin(115200);
+  serial.print("\n");
+  serial.setDebugOutput(true);
   SPIFFS.begin();
   for (byte i = 0; i < gpio_count; i++) {
     pinMode(gpio[i], OUTPUT);
@@ -33,7 +33,7 @@ void setup(void) {
   WiFiManager wifiManager;
   wifiManager.autoConnect("espGpio"); // Create open AP with this SSID
   //wifiManager.autoConnect("AP_SSID", "AP_PASSWORD");
-  DBG_OUTPUT_PORT.print(WiFi.localIP());
+  serial.print(WiFi.localIP());
 
   server.on("/gpio", HTTP_GET, []() {
     int gp = -1;
@@ -52,7 +52,7 @@ void setup(void) {
         } else {
           gpiostat[gp] = (gpiostat[gp] == 0 ? 1 : 0);
         }
-        digitalWrite(gp, gpiostat[gp]);
+        digitalWrite(gpio[gp], gpiostat[gp]);
       }
     }
     server.send(200, "text/plain", "");
@@ -73,7 +73,7 @@ void setup(void) {
   });
   httpUpdater.setup(&server);
   server.begin();
-  DBG_OUTPUT_PORT.println("HTTP server started");
+  serial.println("HTTP server started");
 
 }
 

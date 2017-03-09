@@ -29,7 +29,7 @@ String getContentType(String filename) {
 }
 
 bool handleFileRead(String path) {
-  DBG_OUTPUT_PORT.println("handleFileRead: " + path);
+  serial.println("handleFileRead: " + path);
   if (path.endsWith("/")) path += "index.htm";
   String contentType = getContentType(path);
   String pathWithGz = path + ".gz";

@@ -28,7 +28,7 @@ void setup(void) {
     pinMode(gpio[i], OUTPUT);
     digitalWrite(gpio[i], gpiostat[i]);
   }
-  
+
   //WIFI INIT
   WiFiManager wifiManager;
   wifiManager.autoConnect("espGpio"); // Create open AP with this SSID
@@ -36,11 +36,24 @@ void setup(void) {
   DBG_OUTPUT_PORT.print(WiFi.localIP());
 
   server.on("/gpio", HTTP_GET, []() {
-    if (server.hasArg("gpio") && server.hasArg("status")) {
-      int gp = server.arg("gpio").toInt();
-      String st = server.arg("status");
-      gpiostat[gp] = (st == "on" ? 1 : 0);
-      digitalWrite(gp, gpiostat[gp]);
+    int gp = -1;
+    if (server.hasArg("gpio")) {
+      int tmp = server.arg("gpio").toInt();
+      for (int i = 0; i < gpio_count; i++) {
+        if (gpio[i] == tmp) {
+          gp = i;
+          break;
+        }
+      }
+      if (gp > -1) {
+        if (server.hasArg("status")) {
+          String st = server.arg("status");
+          gpiostat[gp] = (st == "on" ? 1 : 0);
+        } else {
+          gpiostat[gp] = (gpiostat[gp] == 0 ? 1 : 0);
+        }
+        digitalWrite(gp, gpiostat[gp]);
+      }
     }
     server.send(200, "text/plain", "");
   });
@@ -52,7 +65,7 @@ void setup(void) {
   server.on("/status", HTTP_GET, []() {
     String json = "{";
     for (byte i = 0; i < gpio_count; i++) {
-      json += " \""+String(gpio[i]) + "\" :" + String(gpiostat[i]) + (i == gpio_count - 1 ? "" : ", ");
+      json += " \"" + String(gpio[i]) + "\" :" + String(gpiostat[i]) + (i == gpio_count - 1 ? "" : ", ");
     }
     json += "}";
     server.send(200, "text/json", json);

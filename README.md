@@ -20,7 +20,7 @@ Arduino 1.6.8 or earlier.
 
 Сonfigured for use esp8266 board [Arduino esp8266](https://github.com/esp8266/Arduino)
 
-Install Sketch data upload [How to install](http://arduino.esp8266.com/versions/1.6.5-1160-gef26c5f/doc/reference.html#file-system)
+Install Sketch data upload [How to install](https://arduino-esp8266.readthedocs.io/en/2.5.2/filesystem.html?highlight=file%20system#uploading-files-to-file-system)
 
 ## Instalation
 
